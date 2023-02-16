@@ -1,0 +1,10 @@
+ if (groupName.isEmpty) return;
+    if (!Hive.isAdapterRegistered(1)) {
+      Hive.registerAdapter<Group>(GroupAdapter());
+    }
+    final box = await Hive.openBox<Group>('group_box');
+    final group = Group(name: groupName);
+    await box.add(group);
+  }
+  //-----------------------------------------------------------
+  
