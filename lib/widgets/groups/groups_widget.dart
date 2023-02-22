@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:todo_list/widgets/example/groups/groups_widget_model.dart';
+import 'package:todo_list/widgets/groups/groups_widget_model.dart';
 
 class GroupsWidget extends StatefulWidget {
   const GroupsWidget({super.key});
@@ -15,13 +15,13 @@ class _GroupsWidgetState extends State<GroupsWidget> {
   Widget build(BuildContext context) {
     return GroupsWidgetModelProvider(
       model: _model,
-      child: const _GroupsWidgetModel(),
+      child: const _GroupsWidgetBody(),
     );
   }
 }
 
-class _GroupsWidgetModel extends StatelessWidget {
-  const _GroupsWidgetModel({Key? key}) : super(key: key);
+class _GroupsWidgetBody extends StatelessWidget {
+  const _GroupsWidgetBody({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -74,8 +74,7 @@ class _GroupeListRowWidget extends StatelessWidget {
         motion: const StretchMotion(),
         children: [
           SlidableAction(
-            onPressed: (group) => model.deleteGroup(
-                indexInList),
+            onPressed: (group) => model.deleteGroup(indexInList),
             backgroundColor: const Color(0xFFFE4A49),
             foregroundColor: Colors.white,
             icon: Icons.delete,
@@ -88,7 +87,7 @@ class _GroupeListRowWidget extends StatelessWidget {
         child: ListTile(
           title: Text(group.name),
           trailing: const Icon(Icons.chevron_right),
-          onTap: () {},
+          onTap: () => model.showTasks(context, indexInList),
         ),
       ),
     );
