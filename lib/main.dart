@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:todo_list/widgets/app/my_app.dart';
+import 'package:todo_list/ui/widgets/app/my_app.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 

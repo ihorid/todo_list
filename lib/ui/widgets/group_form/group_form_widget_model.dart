@@ -1,26 +1,42 @@
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
+import 'package:todo_list/domain/data_provider/box_manager.dart';
 import 'package:todo_list/domain/entity/group.dart';
 
-class GroupFormWidgetModel {
-  var groupName = '';
-  void saveGroup(BuildContext context) async {
-    if (groupName.isEmpty) return;
-    if (!Hive.isAdapterRegistered(3)) {
-      Hive.registerAdapter<Group>(GroupAdapter());
+class GroupFormWidgetModel extends ChangeNotifier {
+  var _groupName = '';
+  String? errorText;
+
+  set groupName(String value) {
+    if (errorText != null && value.trim().isNotEmpty) {
+      errorText = null;
+      notifyListeners();
     }
-    final box = await Hive.openBox<Group>('group_box');
+    _groupName = value;
+  }
+
+  void saveGroup(BuildContext context) async {
+    final groupName = _groupName.trim();
+    if (groupName.isEmpty) {
+      errorText = 'Введите имя группы';
+      notifyListeners();
+      return;
+    }
+
+    final box = await BoxManager.instance.openGroupBox();
     final group = Group(name: groupName);
     await box.add(group);
+    await BoxManager.instance.closeBox(box);
     Navigator.of(context).pop();
   }
 }
 
-class GroupFormWidgetModelProvider extends InheritedWidget {
+class GroupFormWidgetModelProvider extends InheritedNotifier {
   final GroupFormWidgetModel model;
-  const GroupFormWidgetModelProvider(
-      {super.key, required Widget child, required this.model})
-      : super(child: child);
+  const GroupFormWidgetModelProvider({
+    super.key,
+    required Widget child,
+    required this.model,
+  }) : super(child: child, notifier: model);
 
   static GroupFormWidgetModelProvider? watch(BuildContext context) {
     return context

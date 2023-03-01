@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:todo_list/widgets/group_form/group_form_widget_model.dart';
+import 'package:todo_list/ui/widgets/group_form/group_form_widget_model.dart';
 
 class GroupFormWidget extends StatefulWidget {
   const GroupFormWidget({super.key});
@@ -21,7 +21,7 @@ class _GroupFormWidgetState extends State<GroupFormWidget> {
 }
 
 class _GroupFormWidgetBody extends StatelessWidget {
-  const _GroupFormWidgetBody({super.key});
+  const _GroupFormWidgetBody({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -30,15 +30,13 @@ class _GroupFormWidgetBody extends StatelessWidget {
         centerTitle: true,
         title: const Text('Новая форма'),
       ),
-      body: Center(
-        child: Container(
-          child: const Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 20,
-            ),
-            child: _GroupNameWidget(),
+      body: const Center(
+        child: Padding(
+          padding: EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 20,
           ),
+          child: _GroupNameWidget(),
         ),
       ),
       floatingActionButton: FloatingActionButton(
@@ -52,16 +50,17 @@ class _GroupFormWidgetBody extends StatelessWidget {
 }
 
 class _GroupNameWidget extends StatelessWidget {
-  const _GroupNameWidget({super.key});
+  const _GroupNameWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final model = GroupFormWidgetModelProvider.read(context)?.model;
+    final model = GroupFormWidgetModelProvider.watch(context)?.model;
     return TextField(
       autofocus: true,
-      decoration: const InputDecoration(
-        border: OutlineInputBorder(),
+      decoration: InputDecoration(
+        border: const OutlineInputBorder(),
         hintText: 'Имя группы',
+        errorText: model?.errorText,
       ),
       onEditingComplete: () => model?.saveGroup(context),
       onChanged: (value) => model?.groupName = value,
